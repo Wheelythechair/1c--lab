@@ -1,0 +1,8 @@
+skirtumas tarp ankstesnės versijos ir šios versijos yra, kad
+čia pridėtos kelios funkcijos kaip: 
+vidurkis, kuri skaičiuoja
+	specifinio mokinio nd balų vidurkį
+po_kablelio, kuri versdama float duomenis į
+	int tipo duomenis, jiem palieka tik 2 skaitmenis
+	po kablelio.
+Taip pat visi duomenys išvedami panašiu formatu kaip ir gaunami.
