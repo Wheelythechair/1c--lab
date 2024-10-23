@@ -28,7 +28,9 @@ void space_remove(mokinys& mok);
 double vidurkis(const mokinys& mok);
 double mediana(mokinys& mok);
 void isvedimas(std::vector<mokinys>& mok);
-void generavimas(int mok_kiekis, int ND_kiekis);
+void generavimas(int mok_kiekis, int ND_kiekis, std::string pavadinimas);
+
+void pav_gen(int kiekis, std::vector<std ::string>& pavadinimai);
 
 
 
@@ -37,16 +39,37 @@ void generavimas(int mok_kiekis, int ND_kiekis);
 
 
 int main() {
-    int ilgis, ND_kiekis, mok_kiekis;
+    int ilgis, ND_kiekis, mok_kiekis, f_kiekis, v2mok_kiekis, v2ND_kiekis;
     char gen;
     std::vector<mokinys> mok;
+    std::vector<std::string> pavadinimai;
+
+
+
+    
+
+    std::cout << "programos versijai v0.2 sugeneruokime sabloniniu failu. Kiek failu kursime?" << std::endl;
+    std::cin >> f_kiekis;
+    pav_gen(f_kiekis, pavadinimai);
+    for (int i = 0; i < f_kiekis; i++) {
+        std::cout << "kiek mokiniu noretumet sugeneruot ir kiek pazymiu jie gavo?" << std::endl;
+        std::cin >> v2mok_kiekis >> v2ND_kiekis;
+        generavimas(v2mok_kiekis, v2ND_kiekis, pavadinimai[i]);
+
+    }
+
+
+
+
+
+
 
     std:: cout << "ar norite sugeneruot faila? Spauskite t, jei taip, n, jei ne" << std::endl;
     std::cin >> gen;
     if (gen == 't') {
         std::cout << "kiek mokiniu noretumet sugeneruot ir kiek pazymiu jie gavo?" << std::endl;
         std::cin >> mok_kiekis >> ND_kiekis;
-        generavimas(mok_kiekis, ND_kiekis);
+        generavimas(mok_kiekis, ND_kiekis, "kursiokai.txt");
         nuskaitymas(mok, failo_ilgis(), ND_kiekis, "kursiokai.txt");      // vykdau nuskaitymo funkcija
     }
     else {
@@ -210,8 +233,8 @@ void isvedimas(std::vector<mokinys>& mok) {
         }
     }
 }
-void generavimas(int mok_kiekis, int ND_kiekis) {
-    std::ofstream df("kursiokai.txt");
+void generavimas(int mok_kiekis, int ND_kiekis, std:: string pavadinimas) {
+    std::ofstream df(pavadinimas);
     df << "Vardas                   Pavarde                    ";
     for (int i = 1; i <= ND_kiekis; i++) {
         std::string Hnd = "ND" + std::to_string(i);
@@ -227,12 +250,31 @@ void generavimas(int mok_kiekis, int ND_kiekis) {
         std::string tempP = "Pavarde" + std::to_string(i);
         df << tempP << spacing(tempP, 28);
         for (int j = 1; j <= ND_kiekis; j++) {
-            int tempND = rand() % 11;
-            if (tempND == 10) df << tempND << spacing(std::to_string(tempND), 11);
-            df << tempND << spacing(std::to_string(tempND), 11);
+            int tempND;
+            while (true) {
+                tempND = rand() % 11;
+                if (tempND != 0) {
+                    break;
+                }
+            }
+
+            if (tempND == 10) {
+                df << tempND << spacing(std::to_string(tempND), 11);
+            }
+            else {
+                df << tempND << spacing(std::to_string(tempND), 11);
+            }
 
         }
         df << std::endl;
     }
     df.close();
+}
+
+void pav_gen(int kiekis, std::vector<std::string>& pavadinimai) {
+    for (int i = 1; i <= kiekis; i++) {
+        std::string temp;
+        temp = "pavadinimas" + std::to_string(i) + ".txt";
+        pavadinimai.push_back(temp);
+    }
 }
