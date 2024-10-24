@@ -1,1 +1,1 @@
-baigiau daryt kelis klaidu tvarkymus
+pridejau funkcija kuri trintu v0.2 sukurtus failus ir duodu pasirinkima naudotojui

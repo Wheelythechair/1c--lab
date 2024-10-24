@@ -13,7 +13,6 @@
 
 
 
-
 struct mokinys {
     std::string Vardas, Pavarde;
     std::vector<int> Pazymys;
@@ -28,7 +27,9 @@ void space_remove(mokinys& mok);
 double vidurkis(const mokinys& mok);
 double mediana(mokinys& mok);
 void isvedimas(std::vector<mokinys>& mok);
-void generavimas(int mok_kiekis, int ND_kiekis);
+void generavimas(int mok_kiekis, int ND_kiekis, std::string pavadinimas);
+void pav_gen(int kiekis, std::vector<std ::string>& pavadinimai);
+void f_trinimas(std::vector<std::string>& pavadinimai);
 
 
 
@@ -37,16 +38,49 @@ void generavimas(int mok_kiekis, int ND_kiekis);
 
 
 int main() {
-    int ilgis, ND_kiekis, mok_kiekis;
-    char gen;
-    std::vector<mokinys> mok;
+    int ilgis, ND_kiekis, mok_kiekis, f_kiekis, v2mok_kiekis, v2ND_kiekis;
+    char gen, test, test1;
+    std::vector<mokinys> mok, gen_mok;
+    std::vector<std::string> pavadinimai;
 
+
+    
+    std::cout << "ar norime sugeneruot sabloninius failus v0.2 versijai? t - generuosime, n - ne" << std::endl; // jei norim sukuriam sabloninius failus norio dydzio mok kiekio ir nd kiekio
+    std::cin >> test;
+    if (test == 't') {
+        std::cout << "programos versijai v0.2 sugeneruokime sabloniniu failu. Kiek failu kursime?" << std::endl;
+        std::cin >> f_kiekis;
+        pav_gen(f_kiekis, pavadinimai);
+        for (int i = 0; i < f_kiekis; i++) {
+            std::cout << "kiek mokiniu noretumet sugeneruot ir kiek pazymiu jie gavo?" << std::endl;
+            std::cin >> v2mok_kiekis >> v2ND_kiekis;
+            generavimas(v2mok_kiekis, v2ND_kiekis, pavadinimai[i]);         //generuoju nurodyta kieki failu su nurodytais kiekiais mokiniu ir pazymiu
+            nuskaitymas(gen_mok, v2mok_kiekis, v2ND_kiekis, pavadinimai[i]);
+        }
+
+
+    }
+    
+
+
+    //nuskaitymas(gen_mok, 50, 50, "pavadinimas1.txt");
+    //std::cout << gen_mok[3].Vardas << gen_mok[3].Pavarde << gen_mok[3].Pazymys[0] << std::endl;
+    //for (int i = 0; i < f_kiekis; i++) { std::cout << pavadinimai[i] << std::endl;}
+
+
+
+
+    std::cout << "Ar norite istrinti visus v0.2 sugeneruotus failus? t - istrinti, n - ne" << std::endl;
+    std::cin >> test1;
+    if (test1 == 't') f_trinimas(pavadinimai);
+
+    //////////////////////////////////////////////////////////////////////////////////////////
     std:: cout << "ar norite sugeneruot faila? Spauskite t, jei taip, n, jei ne" << std::endl;
     std::cin >> gen;
     if (gen == 't') {
         std::cout << "kiek mokiniu noretumet sugeneruot ir kiek pazymiu jie gavo?" << std::endl;
         std::cin >> mok_kiekis >> ND_kiekis;
-        generavimas(mok_kiekis, ND_kiekis);
+        generavimas(mok_kiekis, ND_kiekis, "kursiokai.txt");
         nuskaitymas(mok, failo_ilgis(), ND_kiekis, "kursiokai.txt");      // vykdau nuskaitymo funkcija
     }
     else {
@@ -110,7 +144,7 @@ int failo_ilgis() {
     df.close();
     return x;
 }
-void nuskaitymas(std::vector<mokinys>& mok, int ilgis, int ND_kiekis, std::string failas) { // funkcijoj sukuriu nauja mokinys struktura ir nuskaicius viska, graziai viska imetu i mokinys mok struktura
+void nuskaitymas(std::vector<mokinys>& strukturos_pav, int ilgis, int ND_kiekis, std::string failas) { // funkcijoj sukuriu nauja mokinys struktura ir nuskaicius viska, graziai viska imetu i mokinys mok struktura
     std::string temp;
     char raid[50];  //laikinas char skirtas vardo ir pavardes priskyrimui
 
@@ -121,6 +155,7 @@ void nuskaitymas(std::vector<mokinys>& mok, int ilgis, int ND_kiekis, std::strin
         mokinys current;
         df.get(raid, 20);  //Perskaitau ir priskyriu varda
         current.Vardas = raid;
+        //std::cout << current.Vardas << std:: endl;
         df.get(raid, 26);  //perskaitau ir priskyriu pavarde
         current.Pavarde = raid;
 
@@ -130,7 +165,7 @@ void nuskaitymas(std::vector<mokinys>& mok, int ilgis, int ND_kiekis, std::strin
             current.Pazymys.push_back(Pazymys_temp);
         }
         std::getline(df, temp);  // praleidziu likusia eilute
-        mok.push_back(current);
+        strukturos_pav.push_back(current);
     }
     df.close();
 }
@@ -210,8 +245,8 @@ void isvedimas(std::vector<mokinys>& mok) {
         }
     }
 }
-void generavimas(int mok_kiekis, int ND_kiekis) {
-    std::ofstream df("kursiokai.txt");
+void generavimas(int mok_kiekis, int ND_kiekis, std:: string pavadinimas) {
+    std::ofstream df(pavadinimas);
     df << "Vardas                   Pavarde                    ";
     for (int i = 1; i <= ND_kiekis; i++) {
         std::string Hnd = "ND" + std::to_string(i);
@@ -227,12 +262,35 @@ void generavimas(int mok_kiekis, int ND_kiekis) {
         std::string tempP = "Pavarde" + std::to_string(i);
         df << tempP << spacing(tempP, 28);
         for (int j = 1; j <= ND_kiekis; j++) {
-            int tempND = rand() % 11;
-            if (tempND == 10) df << tempND << spacing(std::to_string(tempND), 11);
-            df << tempND << spacing(std::to_string(tempND), 11);
+            int tempND;
+            while (true) {
+                tempND = rand() % 11;
+                if (tempND != 0) {
+                    break;
+                }
+            }
+
+            if (tempND == 10) {
+                df << tempND << spacing(std::to_string(tempND), 11);
+            }
+            else {
+                df << tempND << spacing(std::to_string(tempND), 11);
+            }
 
         }
         df << std::endl;
     }
     df.close();
+}
+void pav_gen(int kiekis, std::vector<std::string>& pavadinimai) {
+    for (int i = 1; i <= kiekis; i++) {
+        std::string temp;
+        temp = "pavadinimas" + std::to_string(i) + ".txt";
+        pavadinimai.push_back(temp);
+    }
+}
+void f_trinimas(std::vector<std::string>& pavadinimai) {
+    for (int i = 0; i < pavadinimai.size(); i++) {
+        remove(pavadinimai[i].c_str());     //kadangi komanda "remove" reikalauja char tipo, tai pradzioj mano string tipo kintamaji pavadinimai, verciu i char array
+    }
 }
