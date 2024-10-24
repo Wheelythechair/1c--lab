@@ -1,0 +1,2 @@
+cia pridejau funkcija kuri suskirstytu mokinius i skirtingus failus pagal ju galutinius pazymius.
+taip pat aptvarkiau isvedima ir padariau ji biski tvarkingesni.
