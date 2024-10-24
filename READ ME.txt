@@ -1,0 +1,1 @@
+sukuriau dar viena funkcija l_isskirstymas kuri naudoja list vietoj vector
