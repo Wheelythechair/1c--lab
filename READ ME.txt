@@ -1,0 +1,1 @@
+Pridejau nauja funkcija kuri veikia kaip vidurkis funkcija, tik su list, vietoj vector
