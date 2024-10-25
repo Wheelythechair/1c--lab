@@ -1,0 +1,4 @@
+CPU - AMD Ryzen 5 1600 Six-Core Processor               3.20 GHz
+RAM - 32 GB
+HDD - ADATA SU800
+SSD - SATA SSD
